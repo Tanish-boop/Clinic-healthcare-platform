@@ -26,6 +26,16 @@ export default function LoginPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"SIGN_IN" | "REGISTER">("SIGN_IN");
 
+  // Check URL query parameters (e.g. /login?tab=register)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("tab") === "register") {
+        setActiveTab("REGISTER");
+      }
+    }
+  }, []);
+
   // Sign In State
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");

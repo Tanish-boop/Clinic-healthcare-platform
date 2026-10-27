@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   FileCheck2,
   ExternalLink,
+  User,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -132,6 +133,14 @@ export default async function HomePage() {
                     <Calendar className="w-4 h-4" />
                     <span>Reserve Priority Consultation</span>
                   </a>
+
+                  <Link
+                    href="/login?tab=register"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-teal-900 bg-teal-50 hover:bg-teal-100/90 px-4 py-3.5 rounded-xl border border-teal-300 transition shadow-2xs"
+                  >
+                    <User className="w-4 h-4 text-teal-700" />
+                    <span>Create Account (Sign Up)</span>
+                  </Link>
 
                   <a
                     href="https://www.google.com/maps/search/?api=1&query=Royal+Heritage+Complex+Somwar+Peth+Pune+411011"

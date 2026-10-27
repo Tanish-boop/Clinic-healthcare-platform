@@ -101,7 +101,7 @@ export function PublicNavbar({
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-700">
+        <nav className="hidden xl:flex items-center gap-6 text-sm font-medium text-slate-700">
           <Link href={basePath || "/"} className="hover:text-teal-600 transition">
             Home
           </Link>
@@ -114,9 +114,6 @@ export function PublicNavbar({
           <Link href={`${basePath}/contact`} className="hover:text-teal-600 transition">
             Timings & Directions
           </Link>
-          <Link href={`${basePath}/policies`} className="hover:text-teal-600 transition">
-            Patient Policies
-          </Link>
           <Link
             href="/portal"
             className="text-teal-800 font-semibold hover:text-teal-950 transition flex items-center gap-1"
@@ -125,13 +122,26 @@ export function PublicNavbar({
           </Link>
         </nav>
 
-        {/* CTA Button */}
-        <div className="hidden sm:flex items-center gap-4">
+        {/* CTA Buttons */}
+        <div className="hidden sm:flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-xs font-bold text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-100 transition"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/login?tab=register"
+            className="inline-flex items-center gap-1.5 border border-teal-700/80 bg-teal-50/60 hover:bg-teal-100 text-teal-900 px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-2xs"
+          >
+            <User className="w-3.5 h-3.5 text-teal-700" />
+            <span>Sign Up</span>
+          </Link>
           <Link
             href={`${basePath}/book`}
-            className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm hover:shadow transition"
+            className="inline-flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm hover:shadow transition"
           >
-            <Calendar className="w-4 h-4" />
+            <Calendar className="w-3.5 h-3.5" />
             <span>Book Appointment</span>
           </Link>
         </div>
@@ -192,30 +202,41 @@ export function PublicNavbar({
             Patient Portal (Slips & Rx)
           </Link>
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-center border border-slate-300 bg-white text-slate-700 py-2.5 rounded-lg font-bold text-xs hover:bg-slate-50 transition"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/login?tab=register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-center bg-teal-800 text-white py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1 hover:bg-teal-900 transition shadow-sm"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Sign Up</span>
+              </Link>
+            </div>
             <Link
               href={`${basePath}/book`}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-center bg-teal-700 text-white py-2.5 rounded-lg font-semibold text-sm"
+              className="text-center bg-teal-700 hover:bg-teal-800 text-white py-2.5 rounded-lg font-semibold text-xs flex items-center justify-center gap-1.5"
             >
-              Book Appointment
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Book Appointment</span>
             </Link>
             <a
               href="https://www.google.com/maps/search/?api=1&query=Royal+Heritage+Complex+Somwar+Peth+Pune+411011"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-center border border-teal-600 bg-teal-50 text-teal-800 py-2.5 rounded-lg font-bold text-sm flex items-center justify-center gap-1.5"
+              className="text-center border border-teal-600 bg-teal-50 text-teal-800 py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5"
             >
-              <MapPin className="w-4 h-4 text-teal-700" />
+              <MapPin className="w-3.5 h-3.5 text-teal-700" />
               <span>Get Directions on Google Maps ↗</span>
             </a>
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-center border border-slate-300 text-slate-700 py-2.5 rounded-lg font-medium text-sm"
-            >
-              Sign In to Patient / Staff Portal
-            </Link>
           </div>
         </div>
       )}
