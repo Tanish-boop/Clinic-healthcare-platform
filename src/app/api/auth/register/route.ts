@@ -60,6 +60,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if email or phone has been verified via OTP
+    const cleanPhoneDigits = data.phone.replace(/\D/g, "").slice(-10);
+    const verifiedEmailOtp = await db.otpVerification.findFirst({
+      where: { identifier: normalizedEmail, type: "EMAIL_VERIFY", verified: true },
+    });
+    const verifiedPhoneOtp = cleanPhoneDigits ? await db.otpVerification.findFirst({
+      where: { identifier: { contains: cleanPhoneDigits }, type: "PHONE_VERIFY", verified: true },
+    }) : null;
+
+    const isEmailVerified = Boolean(verifiedEmailOtp);
+    const isPhoneVerified = Boolean(verifiedPhoneOtp);
+
     let createdUser: any = null;
     let redirectUrl = "/app";
     let role = "PATIENT";
@@ -75,7 +87,6 @@ export async function POST(req: NextRequest) {
       redirectUrl = "/portal";
 
       // Check if an unlinked patient profile exists with this phone number
-      const cleanPhoneDigits = data.phone.replace(/\D/g, "").slice(-10);
       const existingPatient = await db.patient.findFirst({
         where: {
           phone: { contains: cleanPhoneDigits },
@@ -91,6 +102,8 @@ export async function POST(req: NextRequest) {
             passwordHash,
             fullName: data.fullName,
             phone: data.phone,
+            isEmailVerified,
+            isPhoneVerified,
           },
         });
 
@@ -113,6 +126,8 @@ export async function POST(req: NextRequest) {
             passwordHash,
             fullName: data.fullName,
             phone: data.phone,
+            isEmailVerified,
+            isPhoneVerified,
             patientProfile: {
               create: {
                 clinicId: targetClinicId,
@@ -145,6 +160,8 @@ export async function POST(req: NextRequest) {
           passwordHash,
           fullName: data.fullName,
           phone: data.phone,
+          isEmailVerified,
+          isPhoneVerified,
           doctorProfile: {
             create: {
               clinicId: targetClinicId,
@@ -216,6 +233,8 @@ export async function POST(req: NextRequest) {
           passwordHash,
           fullName: data.fullName,
           phone: data.phone,
+          isEmailVerified,
+          isPhoneVerified,
           staffMembership: {
             create: {
               clinicId: targetClinicId,
@@ -243,6 +262,8 @@ export async function POST(req: NextRequest) {
           passwordHash,
           fullName: data.fullName,
           phone: data.phone,
+          isEmailVerified,
+          isPhoneVerified,
           staffMembership: {
             create: {
               clinicId: targetClinicId,

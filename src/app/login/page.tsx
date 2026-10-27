@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -16,6 +16,10 @@ import {
   Briefcase,
   Phone,
   Sparkles,
+  KeyRound,
+  RefreshCw,
+  X,
+  Check,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -28,12 +32,41 @@ export default function LoginPage() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
 
+  // Forgot Password / Reset via OTP State
+  const [isForgotOpen, setIsForgotOpen] = useState(false);
+  const [forgotIdentifier, setForgotIdentifier] = useState("");
+  const [forgotOtp, setForgotOtp] = useState("");
+  const [forgotNewPassword, setForgotNewPassword] = useState("");
+  const [forgotConfirmPassword, setForgotConfirmPassword] = useState("");
+  const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1); // 1: request, 2: verify & set, 3: success
+  const [forgotCooldown, setForgotCooldown] = useState(0);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState("");
+  const [forgotDevCode, setForgotDevCode] = useState("");
+
   // Register State
   const [regAccountType, setRegAccountType] = useState<"PATIENT" | "DOCTOR" | "CLINIC_OWNER" | "STAFF">("PATIENT");
   const [regFullName, setRegFullName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regPhone, setRegPhone] = useState("");
+
+  // Register OTP Verification State
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [emailOtpSending, setEmailOtpSending] = useState(false);
+  const [emailOtpInputOpen, setEmailOtpInputOpen] = useState(false);
+  const [emailOtpCode, setEmailOtpCode] = useState("");
+  const [emailOtpCooldown, setEmailOtpCooldown] = useState(0);
+  const [emailDevCode, setEmailDevCode] = useState("");
+  const [emailOtpError, setEmailOtpError] = useState("");
+
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [phoneOtpSending, setPhoneOtpSending] = useState(false);
+  const [phoneOtpInputOpen, setPhoneOtpInputOpen] = useState(false);
+  const [phoneOtpCode, setPhoneOtpCode] = useState("");
+  const [phoneOtpCooldown, setPhoneOtpCooldown] = useState(0);
+  const [phoneDevCode, setPhoneDevCode] = useState("");
+  const [phoneOtpError, setPhoneOtpError] = useState("");
 
   // Doctor Specific
   const [regSpecialty, setRegSpecialty] = useState("Prosthodontist & Implantologist");
@@ -55,6 +88,16 @@ export default function LoginPage() {
 
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState("");
+
+  // Countdown timer for OTP cooldowns
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setForgotCooldown((c) => (c > 0 ? c - 1 : 0));
+      setEmailOtpCooldown((c) => (c > 0 ? c - 1 : 0));
+      setPhoneOtpCooldown((c) => (c > 0 ? c - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const demoAccounts = [
     { role: "Front Desk Receptionist", email: "reception@apexdental.in", desc: "Live OPD Token queue, Start Exam & walk-in check-in" },
@@ -98,6 +141,196 @@ export default function LoginPage() {
       setLoginError(err.message || "An unexpected error occurred during login");
     } finally {
       setLoginLoading(false);
+    }
+  }
+
+  // OTP Handlers for Password Reset
+  async function handleSendForgotOtp(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    if (!forgotIdentifier.trim()) {
+      setForgotError("Please enter your registered email address or mobile number.");
+      return;
+    }
+
+    setForgotLoading(true);
+    setForgotError("");
+
+    try {
+      const res = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: forgotIdentifier.trim(),
+          type: "PASSWORD_RESET",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to dispatch OTP");
+      }
+
+      setForgotCooldown(60);
+      if (data.devCode) {
+        setForgotDevCode(data.devCode);
+        setForgotOtp(data.devCode); // Auto-populate for seamless pairing
+      }
+      setForgotStep(2);
+    } catch (err: any) {
+      setForgotError(err.message || "Could not send verification OTP");
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  async function handleResetPassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (forgotOtp.length !== 6) {
+      setForgotError("Please enter the 6-digit OTP code received.");
+      return;
+    }
+    if (forgotNewPassword.length < 6) {
+      setForgotError("New password must be at least 6 characters.");
+      return;
+    }
+    if (forgotNewPassword !== forgotConfirmPassword) {
+      setForgotError("Passwords do not match.");
+      return;
+    }
+
+    setForgotLoading(true);
+    setForgotError("");
+
+    try {
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: forgotIdentifier.trim(),
+          code: forgotOtp.trim(),
+          newPassword: forgotNewPassword,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to reset password");
+      }
+
+      setForgotStep(3);
+      if (forgotIdentifier.includes("@")) {
+        setLoginEmail(forgotIdentifier);
+      }
+    } catch (err: any) {
+      setForgotError(err.message || "Password reset failed");
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  // OTP Handlers for Registration Email Verification
+  async function handleSendEmailOtp() {
+    if (!regEmail || !regEmail.includes("@")) {
+      setEmailOtpError("Enter a valid email first");
+      return;
+    }
+    setEmailOtpSending(true);
+    setEmailOtpError("");
+    try {
+      const res = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: regEmail.trim(), type: "EMAIL_VERIFY", channel: "EMAIL" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+      setEmailOtpCooldown(60);
+      setEmailOtpInputOpen(true);
+      if (data.devCode) {
+        setEmailDevCode(data.devCode);
+        setEmailOtpCode(data.devCode);
+      }
+    } catch (err: any) {
+      setEmailOtpError(err.message || "Failed to send OTP");
+    } finally {
+      setEmailOtpSending(false);
+    }
+  }
+
+  async function handleVerifyEmailOtp() {
+    if (emailOtpCode.trim().length !== 6) {
+      setEmailOtpError("Enter 6-digit OTP");
+      return;
+    }
+    setEmailOtpSending(true);
+    setEmailOtpError("");
+    try {
+      const res = await fetch("/api/auth/otp/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: regEmail.trim(), code: emailOtpCode.trim(), type: "EMAIL_VERIFY" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Invalid OTP");
+      setEmailVerified(true);
+      setEmailOtpInputOpen(false);
+    } catch (err: any) {
+      setEmailOtpError(err.message || "Verification failed");
+    } finally {
+      setEmailOtpSending(false);
+    }
+  }
+
+  // OTP Handlers for Registration Phone Verification
+  async function handleSendPhoneOtp() {
+    if (!regPhone || regPhone.replace(/\D/g, "").length < 10) {
+      setPhoneOtpError("Enter a valid 10-digit number");
+      return;
+    }
+    setPhoneOtpSending(true);
+    setPhoneOtpError("");
+    try {
+      const res = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: regPhone.trim(), type: "PHONE_VERIFY", channel: "SMS" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send SMS OTP");
+      setPhoneOtpCooldown(60);
+      setPhoneOtpInputOpen(true);
+      if (data.devCode) {
+        setPhoneDevCode(data.devCode);
+        setPhoneOtpCode(data.devCode);
+      }
+    } catch (err: any) {
+      setPhoneOtpError(err.message || "Failed to send SMS OTP");
+    } finally {
+      setPhoneOtpSending(false);
+    }
+  }
+
+  async function handleVerifyPhoneOtp() {
+    if (phoneOtpCode.trim().length !== 6) {
+      setPhoneOtpError("Enter 6-digit OTP");
+      return;
+    }
+    setPhoneOtpSending(true);
+    setPhoneOtpError("");
+    try {
+      const res = await fetch("/api/auth/otp/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: regPhone.trim(), code: phoneOtpCode.trim(), type: "PHONE_VERIFY" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Invalid SMS OTP");
+      setPhoneVerified(true);
+      setPhoneOtpInputOpen(false);
+    } catch (err: any) {
+      setPhoneOtpError(err.message || "Verification failed");
+    } finally {
+      setPhoneOtpSending(false);
     }
   }
 
@@ -184,7 +417,7 @@ export default function LoginPage() {
                   : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
             >
-              Sign In (Existing Accounts & Demos)
+              Sign In (Existing & Demos)
             </button>
             <button
               type="button"
@@ -246,6 +479,22 @@ export default function LoginPage() {
                       placeholder="••••••••••••"
                       className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
                     />
+                  </div>
+
+                  <div className="flex justify-end mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsForgotOpen(true);
+                        setForgotStep(1);
+                        setForgotError("");
+                        if (loginEmail) setForgotIdentifier(loginEmail);
+                      }}
+                      className="text-[11px] font-semibold text-teal-700 hover:text-teal-900 hover:underline inline-flex items-center gap-1"
+                    >
+                      <KeyRound className="w-3 h-3" />
+                      Forgot password? Reset via OTP
+                    </button>
                   </div>
                 </div>
 
@@ -367,56 +616,180 @@ export default function LoginPage() {
               </div>
 
               <form onSubmit={handleRegister} className="space-y-4">
-                {/* Common Fields */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Full Legal Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={regFullName}
-                      onChange={(e) => setRegFullName(e.target.value)}
-                      placeholder={regAccountType === "DOCTOR" ? "Dr. Full Name" : "Your Full Name"}
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
-                    />
-                  </div>
+                {/* Full Legal Name */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Full Legal Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={regFullName}
+                    onChange={(e) => setRegFullName(e.target.value)}
+                    placeholder={regAccountType === "DOCTOR" ? "Dr. Full Name" : "Your Full Name"}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                {/* Mobile Number + SMS OTP Verification */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold text-slate-700">
                       10-Digit Mobile Number
                     </label>
+                    {phoneVerified ? (
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1 border border-emerald-200">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSendPhoneOtp}
+                        disabled={phoneOtpSending || phoneOtpCooldown > 0 || !regPhone}
+                        className="text-[10px] font-bold text-teal-700 hover:text-teal-900 disabled:opacity-50"
+                      >
+                        {phoneOtpCooldown > 0 ? `Resend SMS OTP (${phoneOtpCooldown}s)` : "Verify via SMS OTP"}
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                     <input
                       type="tel"
                       required
                       value={regPhone}
-                      onChange={(e) => setRegPhone(e.target.value)}
-                      placeholder="+91 98..."
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                      onChange={(e) => {
+                        setRegPhone(e.target.value);
+                        setPhoneVerified(false);
+                      }}
+                      placeholder="9823012345"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
                     />
                   </div>
+
+                  {/* Inline SMS OTP Verification Drawer */}
+                  {phoneOtpInputOpen && !phoneVerified && (
+                    <div className="p-2.5 bg-teal-50/70 border border-teal-200 rounded-xl space-y-2 text-xs">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-teal-900">
+                        <span>Enter 6-digit SMS code</span>
+                        {phoneDevCode && (
+                          <button
+                            type="button"
+                            onClick={() => setPhoneOtpCode(phoneDevCode)}
+                            className="text-[10px] bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded font-mono hover:bg-teal-200"
+                          >
+                            Auto-fill dev code: {phoneDevCode}
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          value={phoneOtpCode}
+                          onChange={(e) => setPhoneOtpCode(e.target.value)}
+                          placeholder="••••••"
+                          className="flex-1 px-3 py-1.5 text-center font-mono tracking-widest text-xs rounded-lg border border-slate-300 bg-white"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleVerifyPhoneOtp}
+                          disabled={phoneOtpSending}
+                          className="px-3 py-1.5 text-xs font-bold text-white bg-teal-800 rounded-lg hover:bg-teal-900 disabled:opacity-50"
+                        >
+                          {phoneOtpSending ? "Verifying..." : "Verify"}
+                        </button>
+                      </div>
+                      {phoneOtpError && (
+                        <p className="text-[10px] text-red-600">{phoneOtpError}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                {/* Email Address + Email OTP Verification */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold text-slate-700">
                       Email Address (Login ID)
                     </label>
+                    {emailVerified ? (
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1 border border-emerald-200">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSendEmailOtp}
+                        disabled={emailOtpSending || emailOtpCooldown > 0 || !regEmail}
+                        className="text-[10px] font-bold text-teal-700 hover:text-teal-900 disabled:opacity-50"
+                      >
+                        {emailOtpCooldown > 0 ? `Resend Email OTP (${emailOtpCooldown}s)` : "Verify via Email OTP"}
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                     <input
                       type="email"
                       required
                       value={regEmail}
-                      onChange={(e) => setRegEmail(e.target.value)}
+                      onChange={(e) => {
+                        setRegEmail(e.target.value);
+                        setEmailVerified(false);
+                      }}
                       placeholder="you@domain.com"
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Create Password (Min 6 chars)
-                    </label>
+                  {/* Inline Email OTP Verification Drawer */}
+                  {emailOtpInputOpen && !emailVerified && (
+                    <div className="p-2.5 bg-teal-50/70 border border-teal-200 rounded-xl space-y-2 text-xs">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-teal-900">
+                        <span>Enter 6-digit email code</span>
+                        {emailDevCode && (
+                          <button
+                            type="button"
+                            onClick={() => setEmailOtpCode(emailDevCode)}
+                            className="text-[10px] bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded font-mono hover:bg-teal-200"
+                          >
+                            Auto-fill dev code: {emailDevCode}
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          value={emailOtpCode}
+                          onChange={(e) => setEmailOtpCode(e.target.value)}
+                          placeholder="••••••"
+                          className="flex-1 px-3 py-1.5 text-center font-mono tracking-widest text-xs rounded-lg border border-slate-300 bg-white"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleVerifyEmailOtp}
+                          disabled={emailOtpSending}
+                          className="px-3 py-1.5 text-xs font-bold text-white bg-teal-800 rounded-lg hover:bg-teal-900 disabled:opacity-50"
+                        >
+                          {emailOtpSending ? "Verifying..." : "Verify"}
+                        </button>
+                      </div>
+                      {emailOtpError && (
+                        <p className="text-[10px] text-red-600">{emailOtpError}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Password Field */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Create Password (Min 6 chars)
+                  </label>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                     <input
                       type="password"
                       required
@@ -424,7 +797,7 @@ export default function LoginPage() {
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
                     />
                   </div>
                 </div>
@@ -594,6 +967,198 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
+
+      {/* ========================================================= */}
+      {/* FORGOT PASSWORD / OTP RESET MODAL                         */}
+      {/* ========================================================= */}
+      {isForgotOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
+            <button
+              type="button"
+              onClick={() => {
+                setIsForgotOpen(false);
+                setForgotStep(1);
+                setForgotError("");
+              }}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center">
+                <KeyRound className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">
+                  Reset Password via OTP
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Instant email & mobile verification
+                </p>
+              </div>
+            </div>
+
+            {forgotError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                <span>{forgotError}</span>
+              </div>
+            )}
+
+            {/* STEP 1: Enter Identifier */}
+            {forgotStep === 1 && (
+              <form onSubmit={handleSendForgotOtp} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Registered Email or 10-Digit Mobile
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={forgotIdentifier}
+                    onChange={(e) => setForgotIdentifier(e.target.value)}
+                    placeholder="name@example.com or 9823012345"
+                    className="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                  />
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    We will dispatch a 6-digit cryptographic security code.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={forgotLoading || !forgotIdentifier.trim()}
+                  className="w-full flex justify-center items-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-teal-800 hover:bg-teal-900 transition shadow-sm disabled:opacity-50"
+                >
+                  {forgotLoading ? "Sending OTP Code..." : "Send Verification OTP"}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+
+            {/* STEP 2: Enter OTP & New Password */}
+            {forgotStep === 2 && (
+              <form onSubmit={handleResetPassword} className="space-y-3.5">
+                <div className="p-2.5 bg-teal-50 border border-teal-200 rounded-xl text-xs text-teal-950 flex items-center justify-between">
+                  <span className="truncate">Sent to: <strong>{forgotIdentifier}</strong></span>
+                  <button
+                    type="button"
+                    onClick={handleSendForgotOtp}
+                    disabled={forgotCooldown > 0 || forgotLoading}
+                    className="text-[10px] font-bold text-teal-800 hover:underline shrink-0 ml-2 disabled:opacity-50"
+                  >
+                    {forgotCooldown > 0 ? `Resend (${forgotCooldown}s)` : "Resend OTP"}
+                  </button>
+                </div>
+
+                {forgotDevCode && (
+                  <div className="p-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-xs flex items-center justify-between">
+                    <span>💡 [Dev Mode] Instant OTP: <strong>{forgotDevCode}</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => setForgotOtp(forgotDevCode)}
+                      className="text-[10px] bg-amber-200 hover:bg-amber-300 px-2 py-0.5 rounded font-bold"
+                    >
+                      Fill
+                    </button>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Enter 6-Digit OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={6}
+                    value={forgotOtp}
+                    onChange={(e) => setForgotOtp(e.target.value)}
+                    placeholder="••••••"
+                    className="w-full px-3 py-2 text-center font-mono tracking-widest text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    New Password (Min 6 chars)
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={forgotNewPassword}
+                    onChange={(e) => setForgotNewPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={forgotConfirmPassword}
+                    onChange={(e) => setForgotConfirmPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-700"
+                  />
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setForgotStep(1)}
+                    className="px-3 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={forgotLoading || forgotOtp.length !== 6}
+                    className="flex-1 flex justify-center items-center gap-1.5 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-teal-800 hover:bg-teal-900 transition shadow-sm disabled:opacity-50"
+                  >
+                    {forgotLoading ? "Validating OTP & Updating..." : "Set New Password"}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* STEP 3: Success Confirmation */}
+            {forgotStep === 3 && (
+              <div className="text-center py-4 space-y-4">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center">
+                  <Check className="w-6 h-6 stroke-[3]" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Password Successfully Reset!
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Your clinic credentials have been safely updated. You can now log into your account.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotOpen(false);
+                    setActiveTab("SIGN_IN");
+                  }}
+                  className="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-teal-800 hover:bg-teal-900 transition"
+                >
+                  Proceed to Sign In
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

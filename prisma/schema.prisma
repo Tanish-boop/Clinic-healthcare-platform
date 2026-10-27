@@ -147,6 +147,8 @@ model User {
   avatarUrl       String?
   isSuperAdmin    Boolean          @default(false)
   isActive        Boolean          @default(true)
+  isEmailVerified Boolean          @default(false)
+  isPhoneVerified Boolean          @default(false)
   lastLoginAt     DateTime?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -621,3 +623,20 @@ model ClinicProspect {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+model OtpVerification {
+  id          String   @id @default(cuid())
+  identifier  String   // Email address or 10-digit mobile number
+  code        String   // 6-digit numeric OTP code
+  type        String   // "EMAIL_VERIFY", "PHONE_VERIFY", "PASSWORD_RESET"
+  channel     String   @default("EMAIL") // "EMAIL", "SMS"
+  expiresAt   DateTime
+  attempts    Int      @default(0) // Failed attempt counter (max 5)
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([identifier, type])
+  @@index([code])
+}
+

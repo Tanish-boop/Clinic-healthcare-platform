@@ -212,6 +212,85 @@ async function runTestSuite() {
   }
 
   // --------------------------------------------------------------------------
+  // TEST GROUP 9: OTP VERIFICATION & SECURE PASSWORD RESET ENGINE
+  // --------------------------------------------------------------------------
+  console.log("\n👉 Test Group 9: Email & SMS OTP Verification and Password Reset Engine");
+  try {
+    const testEmail = `test.clinic.${Date.now()}@apexdental.in`;
+    const testPhone = "9823012345";
+
+    // 1. Send Email OTP
+    const emailSendRes = await fetch(`${BASE_URL}/api/auth/otp/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: testEmail, type: "EMAIL_VERIFY", channel: "EMAIL" }),
+    });
+    const emailSendData = await emailSendRes.json();
+    assert(emailSendRes.ok && emailSendData.success, "Email OTP dispatch endpoint returns success");
+    assert(typeof emailSendData.devCode === "string" && emailSendData.devCode.length === 6, "Cryptographic 6-digit OTP code generated");
+
+    // 2. Rate-Limiting Cooldown Check (Sending immediately should be throttled)
+    const throttleRes = await fetch(`${BASE_URL}/api/auth/otp/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: testEmail, type: "EMAIL_VERIFY" }),
+    });
+    assert(throttleRes.status === 429, "60-second OTP cooldown throttles rapid repeat requests");
+
+    // 3. Reject Wrong OTP Code
+    const wrongOtpRes = await fetch(`${BASE_URL}/api/auth/otp/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: testEmail, code: "000000", type: "EMAIL_VERIFY" }),
+    });
+    assert(wrongOtpRes.status === 400, "Invalid OTP code is safely rejected");
+
+    // 4. Validate Correct OTP Code
+    const correctOtpRes = await fetch(`${BASE_URL}/api/auth/otp/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: testEmail, code: emailSendData.devCode, type: "EMAIL_VERIFY" }),
+    });
+    const correctOtpData = await correctOtpRes.json();
+    assert(correctOtpRes.ok && correctOtpData.success, "Valid OTP code successfully marks destination verified");
+
+    // 5. Send Mobile SMS OTP
+    const smsSendRes = await fetch(`${BASE_URL}/api/auth/otp/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: testPhone, type: "PHONE_VERIFY", channel: "SMS" }),
+    });
+    const smsSendData = await smsSendRes.json();
+    assert(smsSendRes.ok && smsSendData.channel === "SMS", "Mobile SMS OTP route handles 10-digit Indian numbers");
+
+    // 6. OTP-Based Password Reset Flow
+    const userToReset = await prisma.user.findFirst();
+    if (userToReset) {
+      const resetOtpRes = await fetch(`${BASE_URL}/api/auth/otp/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: userToReset.email, type: "PASSWORD_RESET" }),
+      });
+      const resetOtpData = await resetOtpRes.json();
+      if (resetOtpData.success && resetOtpData.devCode) {
+        const updateRes = await fetch(`${BASE_URL}/api/auth/reset-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            identifier: userToReset.email,
+            code: resetOtpData.devCode,
+            newPassword: "Password@123", // restore standard demo password
+          }),
+        });
+        const updateData = await updateRes.json();
+        assert(updateRes.ok && updateData.success, "Password reset with OTP successfully updates password hash");
+      }
+    }
+  } catch (err) {
+    assert(false, "OTP test group encountered error", err.message);
+  }
+
+  // --------------------------------------------------------------------------
   // SUMMARY
   // --------------------------------------------------------------------------
   console.log("\n========================================================");
