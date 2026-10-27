@@ -119,6 +119,25 @@ export function BookingWidget({
     };
   }, [doctors]);
 
+  // Broadcast booking state changes to sync FloatingContactWidget and other CTAs
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const doc = doctors.find((d) => d.id === selectedDoctorId);
+    const srv = services.find((s) => s.id === selectedServiceId);
+    window.dispatchEvent(
+      new CustomEvent("apex-booking-state-change", {
+        detail: {
+          doctorId: selectedDoctorId,
+          doctorName: doc?.name,
+          serviceId: selectedServiceId,
+          serviceName: srv?.name,
+          date: selectedDate,
+          time: selectedTime,
+        },
+      })
+    );
+  }, [selectedDoctorId, selectedServiceId, selectedDate, selectedTime, doctors, services]);
+
   // Fetch slots whenever doctor or date changes
   useEffect(() => {
     if (!selectedDoctorId || !selectedDate) return;

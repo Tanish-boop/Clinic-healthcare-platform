@@ -92,7 +92,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
           </div>
 
           <div className="text-left sm:text-right text-[11px] text-slate-700 space-y-0.5">
-            <div className="font-bold text-slate-900">Dr. {data.doctorName}</div>
+            <div className="font-bold text-slate-900">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
             <div className="text-teal-800 font-semibold">{data.doctorSpecialty}</div>
             <div className="text-slate-500 font-mono text-[10px]">
               {data.doctorQualification || "BDS, MDS • Specialist Practitioner"}
@@ -283,7 +283,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
             <div className="text-[10px] text-teal-900 font-bold uppercase tracking-wider">
               Verified Medical Seal
             </div>
-            <div className="text-xs font-bold text-slate-900">Dr. {data.doctorName}</div>
+            <div className="text-xs font-bold text-slate-900">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
             <div className="text-[9px] text-teal-800">{data.doctorQualification || "BDS, MDS"}</div>
             <div className="text-[9px] text-slate-600 font-bold">REG: {data.doctorRegNumber || "MDC-74921"}</div>
           </div>

@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
                 data.regNumber || `MDC-${Math.floor(10000 + Math.random() * 90000)}`,
               experienceYears: data.experienceYears ? Number(data.experienceYears) : 8,
               consultationFee: data.consultationFee ? Number(data.consultationFee) : 500,
-              bio: `Dr. ${data.fullName} is a registered specialist serving with Apex Dental & Aesthetic Lounge.`,
+              bio: `Dr. ${data.fullName.trim().replace(/^dr\.?\s+/i, "")} is a registered specialist serving with Apex Dental & Aesthetic Lounge.`,
             },
           },
         },

@@ -76,8 +76,9 @@ export function MobileStickyBottomBar({
     }
   };
 
+  const cleanDoc = currentDoctor.shortName.trim().replace(/^dr\.?\s+/i, "");
   const whatsappText = encodeURIComponent(
-    `Hello Apex Lounge, I am inquiring about booking a consultation with ${currentDoctor.shortName} at your Pune clinic.`
+    `Hello Dr. ${cleanDoc} & Apex Dental, I want consultation for Dr. ${cleanDoc} at your Pune clinic. Please share the available appointment slots.`
   );
 
   return (

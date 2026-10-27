@@ -42,7 +42,63 @@ export function FloatingContactWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Dynamic booking state for personalized WhatsApp messages
+  const [activeDoctor, setActiveDoctor] = useState<{
+    id?: string;
+    nameSnippet?: string;
+    name?: string;
+  } | null>({
+    nameSnippet: "Ananya",
+    name: "Dr. Ananya Kulkarni",
+  });
+  const [activeService, setActiveService] = useState<string | null>(null);
+  const [activeDate, setActiveDate] = useState<string | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Synchronize with doctor selections across homepage and booking widget
+  useEffect(() => {
+    function handleDoctorChange(e: Event) {
+      const custom = e as CustomEvent<{
+        id?: string;
+        nameSnippet?: string;
+        shortName?: string;
+        name?: string;
+      }>;
+      if (custom.detail) {
+        setActiveDoctor({
+          id: custom.detail.id,
+          nameSnippet: custom.detail.nameSnippet,
+          name: custom.detail.shortName || custom.detail.name,
+        });
+      }
+    }
+
+    function handleBookingState(e: Event) {
+      const custom = e as CustomEvent<{
+        doctorName?: string;
+        serviceName?: string;
+        date?: string;
+      }>;
+      if (custom.detail) {
+        if (custom.detail.doctorName) {
+          setActiveDoctor((prev) => ({ ...prev, name: custom.detail.doctorName }));
+        }
+        if (custom.detail.serviceName) setActiveService(custom.detail.serviceName);
+        if (custom.detail.date) setActiveDate(custom.detail.date);
+      }
+    }
+
+    window.addEventListener("apex-doctor-change", handleDoctorChange);
+    window.addEventListener("apex-select-booking-doctor", handleDoctorChange);
+    window.addEventListener("apex-booking-state-change", handleBookingState);
+
+    return () => {
+      window.removeEventListener("apex-doctor-change", handleDoctorChange);
+      window.removeEventListener("apex-select-booking-doctor", handleDoctorChange);
+      window.removeEventListener("apex-booking-state-change", handleBookingState);
+    };
+  }, []);
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
@@ -110,6 +166,27 @@ export function FloatingContactWidget() {
     { label: "🦷 Emergency Toothache", query: "I have acute toothache pain. What should I do?" },
     { label: "📅 Book Appointment", query: "How do I book an appointment?" },
   ];
+
+  const getWhatsAppMessage = () => {
+    const rawName =
+      activeDoctor?.name ||
+      (activeDoctor?.nameSnippet === "Rohan" ? "Dr. Rohan Deshmukh" : "Dr. Ananya Kulkarni");
+    const cleanDoc = rawName.trim().replace(/^dr\.?\s+/i, "");
+    const isDerm =
+      activeDoctor?.nameSnippet === "Rohan" || cleanDoc.toLowerCase().includes("rohan");
+
+    if (activeService) {
+      return `Hello Dr. ${cleanDoc} & Apex Dental Lounge, I want consultation for Dr. ${cleanDoc} for ${activeService}${
+        activeDate ? ` on ${activeDate}` : ""
+      }. Please share available appointment slots.`;
+    }
+
+    if (isDerm) {
+      return `Hello Dr. ${cleanDoc} & Apex Dental Lounge, I want consultation for Dr. ${cleanDoc} for clinical dermatology & skin aesthetics in Pune. Please share available appointment slots.`;
+    }
+
+    return `Hello Dr. ${cleanDoc} & Apex Dental Lounge, I want consultation for Dr. ${cleanDoc} for advanced dental care in Pune. Please share available appointment slots.`;
+  };
 
   return (
     <div className="no-print floating-contact-widget fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 font-sans">
@@ -264,14 +341,18 @@ export function FloatingContactWidget() {
       {/* 2. FLOATING ACTION BUTTONS ROW                              */}
       {/* ----------------------------------------------------------- */}
       <div className="flex items-center gap-3">
-        {/* Button A: WhatsApp Direct Shortcut */}
+        {/* Button A: WhatsApp Direct Shortcut with Periodic Vibration Animation */}
         <a
-          href="https://wa.me/919765539107?text=Hello%20Apex%20Dental%20%26%20Aesthetic%20Lounge%2C%20I%20would%20like%20to%20inquire%20about%20a%20consultation."
+          href={`https://wa.me/919765539107?text=${encodeURIComponent(getWhatsAppMessage())}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xl hover:shadow-2xl transition transform hover:scale-105 active:scale-95"
+          className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xl hover:shadow-2xl transition transform hover:scale-110 active:scale-95 animate-whatsapp-vibe"
           aria-label="Direct WhatsApp Contact with Clinic"
         >
+          {/* Notification Ping Alert Badge (like Chatbot) */}
+          <span className="w-3 h-3 rounded-full bg-emerald-300 border-2 border-white absolute -top-0.5 -right-0.5 animate-ping" />
+          <span className="w-3 h-3 rounded-full bg-emerald-400 border-2 border-white absolute -top-0.5 -right-0.5 shadow-xs" />
+
           {/* WhatsApp Brand Icon SVG */}
           <svg
             className="w-6 h-6 sm:w-7 sm:h-7 fill-current"
@@ -283,7 +364,7 @@ export function FloatingContactWidget() {
 
           {/* Desktop Hover Tooltip */}
           <span className="hidden sm:block absolute right-full mr-3 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
-            Direct WhatsApp Desk (+91 97655 39107)
+            WhatsApp Dr. {activeDoctor?.name?.trim().replace(/^dr\.?\s+/i, "") || "Ananya"} (+91 97655 39107)
           </span>
         </a>
 

@@ -25,6 +25,14 @@ export default async function DoctorPage({ searchParams }: DoctorPageProps) {
     });
   }
 
+  if (!doctor && session?.userId) {
+    doctor = await db.doctorProfile.findUnique({
+      where: { userId: session.userId },
+      include: { user: { select: { fullName: true } } },
+    });
+  }
+
+  // Fallback for clinic owners / admins previewing the clinical cockpit
   if (!doctor) {
     doctor = await db.doctorProfile.findFirst({
       where: { clinicId },
@@ -36,10 +44,11 @@ export default async function DoctorPage({ searchParams }: DoctorPageProps) {
     return <div>No doctor profile found in this clinic</div>;
   }
 
-  // Fetch active queue appointments for this doctor (or all active if none)
+  // Fetch active queue appointments strictly for this doctor
   const queueAppointments = await db.appointment.findMany({
     where: {
       clinicId,
+      doctorId: doctor.id,
       status: { notIn: ["CANCELLED"] },
     },
     include: {

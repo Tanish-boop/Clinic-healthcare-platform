@@ -266,7 +266,7 @@ export function DoctorCockpit({
           </div>
           <div>
             <h2 className="text-base font-bold text-slate-900">
-              Doctor Clinical Cockpit • Dr. {doctorName}
+              Doctor Clinical Cockpit • Dr. {doctorName.trim().replace(/^dr\.?\s+/i, "")}
             </h2>
             <p className="text-xs text-slate-500">
               {doctorSpecialty} • Active EHR Consultation
@@ -890,8 +890,58 @@ export function DoctorCockpit({
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center text-xs text-slate-500">
-          No patients waiting in queue today.
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-12 text-center space-y-6 shadow-xs max-w-2xl mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto shadow-xs">
+            <Stethoscope className="w-8 h-8 text-teal-700" />
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-lg font-bold text-slate-900">
+              Welcome, Dr. {doctorName.trim().replace(/^dr\.?\s+/i, "")}
+            </h3>
+            <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+              Your real-time Clinical EHR Cockpit is connected and ready. You have no patient appointments waiting in your queue today.
+            </p>
+          </div>
+
+          {/* Doctor Credentials Card */}
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-left grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div>
+              <span className="text-[10px] text-slate-400 uppercase font-semibold block">Specialty</span>
+              <span className="font-bold text-slate-800">{doctorSpecialty}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-400 uppercase font-semibold block">Council Reg</span>
+              <span className="font-mono font-bold text-teal-900">{doctorRegNumber || "MDC Verified"}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-400 uppercase font-semibold block">Qualification</span>
+              <span className="font-bold text-slate-800">{doctorQualification || "BDS / MDS / MD"}</span>
+            </div>
+          </div>
+
+          {/* Action Row */}
+          <div className="pt-2 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/app/appointments"
+              className="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Schedule New Appointment</span>
+            </Link>
+            <Link
+              href="/book"
+              target="_blank"
+              className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-semibold transition"
+            >
+              <ExternalLink className="w-4 h-4 text-slate-500" />
+              <span>View Public Booking Page</span>
+            </Link>
+          </div>
+          
+          <p className="text-[11px] text-slate-400">
+            ℹ️ Appointments booked by patients on the clinic homepage will appear here instantly.
+          </p>
         </div>
       )}
 

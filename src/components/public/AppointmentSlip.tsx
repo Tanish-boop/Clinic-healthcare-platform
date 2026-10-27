@@ -137,7 +137,7 @@ export function AppointmentSlip({ data, onClose, isModal = false }: AppointmentS
             Consulting Specialist
           </div>
           <div>
-            <div className="font-bold text-slate-900 text-sm">Dr. {data.doctorName}</div>
+            <div className="font-bold text-slate-900 text-sm">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
             <div className="text-teal-800 font-medium text-[11px]">
               {data.doctorSpecialty || "Consultant Specialist"}
             </div>

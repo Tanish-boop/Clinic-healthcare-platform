@@ -54,6 +54,30 @@ body {
   animation-play-state: paused;
 }
 
+/* WhatsApp Attention Vibration Animation */
+@keyframes whatsapp-vibe {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  8%, 24% {
+    transform: rotate(-12deg) scale(1.08);
+  }
+  16%, 32% {
+    transform: rotate(12deg) scale(1.08);
+  }
+  40% {
+    transform: rotate(-4deg) scale(1.03);
+  }
+  48% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-whatsapp-vibe {
+  animation: whatsapp-vibe 3.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  transform-origin: center center;
+}
+
 @media print {
   @page {
     size: A4 portrait;
