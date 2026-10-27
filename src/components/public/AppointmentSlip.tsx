@@ -72,7 +72,7 @@ export function AppointmentSlip({ data, onClose, isModal = false }: AppointmentS
         </div>
 
         <div className="text-left sm:text-right text-[11px] text-slate-600 space-y-0.5">
-          <div className="font-bold text-slate-900">Desk: {data.clinicPhone || "+91 91408 92818"}</div>
+          <div className="font-bold text-slate-900">Desk: {data.clinicPhone || "+91 97655 39107"}</div>
           <div>Mon - Sat: 9:00 AM - 8:30 PM</div>
           <div className="text-[10px] text-teal-700 font-medium">Class-B Sterile Autoclave Facility</div>
         </div>

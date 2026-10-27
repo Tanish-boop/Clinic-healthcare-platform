@@ -77,8 +77,8 @@ const CLINIC_KNOWLEDGE = {
   ],
   timings: "Mon-Sat: 09:30 AM – 08:30 PM | Sun: 10:00 AM – 02:00 PM (Emergency Trauma & Pre-booked)",
   location: "Plot 42, West Avenue, Kalyani Nagar / Somwar Peth, Pune - 411006 (Landmark: Near Jogger's Park)",
-  contact: "+91 98230 45678 / +91 (020) 2668-9100",
-  whatsapp: "+91 98230 45678",
+  contact: "+91 97655 39107",
+  whatsapp: "+91 97655 39107",
   fees: [
     "Consultation & Diagnostic X-Rays: ₹500",
     "Digital Scaling & Polishing: ₹1,500",
@@ -150,7 +150,7 @@ function generateSecureTriageResponse(sanitizedQuery: string): { reply: string; 
   // 4. Emergency Toothache / Acute Dental Pain
   if (q.includes("pain") || q.includes("toothache") || q.includes("emergency") || q.includes("swelling") || q.includes("bleeding") || q.includes("broken")) {
     return {
-      reply: `Clinical First-Aid Notice:\n\nIf you are experiencing severe acute dental pain or facial swelling:\n1. Rinse with warm saline (salt water).\n2. Avoid placing crushed aspirin directly on the gums.\n3. Apply a cold compress outside the cheek.\n\n⚠️ Please visit our clinic immediately or call our emergency triage desk at +91 98230 45678. We keep designated same-day priority emergency slots.`,
+      reply: `Clinical First-Aid Notice:\n\nIf you are experiencing severe acute dental pain or facial swelling:\n1. Rinse with warm saline (salt water).\n2. Avoid placing crushed aspirin directly on the gums.\n3. Apply a cold compress outside the cheek.\n\n⚠️ Please visit our clinic immediately or call our emergency triage desk at +91 97655 39107. We keep designated same-day priority emergency slots.`,
       actionUrl: "/book",
       actionText: "Book Same-Day Emergency Slot",
     };
@@ -185,7 +185,7 @@ function generateSecureTriageResponse(sanitizedQuery: string): { reply: string; 
 
   // 8. General Healthcare / Dermatology / Dental Advice
   return {
-    reply: `Hello! I am Dr. Apex's virtual assistant for Apex Dental & Aesthetic Lounge, Pune.\n\nI can help you with:\n• Booking an appointment with Dr. Ananya or Dr. Rohan\n• Checking transparent treatment fees & pricing\n• Clinic timings & emergency trauma directions\n• Accessing your digital prescriptions & slips\n\nHow may I assist your care today? You can also message our front desk directly on WhatsApp at +91 98230 45678.`,
+    reply: `Hello! I am Dr. Apex's virtual assistant for Apex Dental & Aesthetic Lounge, Pune.\n\nI can help you with:\n• Booking an appointment with Dr. Ananya or Dr. Rohan\n• Checking transparent treatment fees & pricing\n• Clinic timings & emergency trauma directions\n• Accessing your digital prescriptions & slips\n\nHow may I assist your care today? You can also message our front desk directly on WhatsApp at +91 97655 39107.`,
     actionUrl: "/book",
     actionText: "Book Consultation",
   };
@@ -213,7 +213,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Too many requests. Please wait a minute before sending another message or contact our front desk at +91 98230 45678.",
+            "Too many requests. Please wait a minute before sending another message or contact our front desk at +91 97655 39107.",
         },
         { status: 429 }
       );

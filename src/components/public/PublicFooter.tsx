@@ -12,7 +12,7 @@ interface PublicFooterProps {
 
 export function PublicFooter({
   clinicName = "Apex Dental & Aesthetic Lounge",
-  phone = "+91 91408 92818",
+  phone = "+91 97655 39107",
   email = "care@apexdental.in",
   address = "Royal Heritage Complex, Somwar Peth, Pune 411011",
   city = "Pune",

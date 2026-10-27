@@ -113,7 +113,7 @@ export default async function SkinDoctorInPunePage() {
                   Book Skin Consultation Slot
                 </a>
                 <a
-                  href={`https://wa.me/${((clinic as any).whatsappNumber || clinic.primaryPhone || "919823045678").replace(/\D/g, "")}?text=${encodeURIComponent(
+                  href={`https://wa.me/${((clinic as any).whatsappNumber || clinic.primaryPhone || "919765539107").replace(/\D/g, "")}?text=${encodeURIComponent(
                     "Hello Apex Clinic Pune, I would like to consult with Dr. Rohan for skin/hair treatment."
                   )}`}
                   target="_blank"

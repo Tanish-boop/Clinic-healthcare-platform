@@ -106,8 +106,8 @@ async function main() {
       area: "Somwar Peth",
       address: "Shop 12-14, Ground Floor, Royal Heritage Complex, Somwar Peth, Pune 411011",
       postalCode: "411011",
-      primaryPhone: "+91 91408 92818",
-      secondaryPhone: "+91 84465 71232",
+      primaryPhone: "+91 97655 39107",
+      secondaryPhone: "+91 97655 39107",
       email: "care@apexdental.in",
       websiteUrl: "https://apexdental.medinexus.in",
       googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Royal+Heritage+Complex+Somwar+Peth+Pune+411011",
@@ -233,7 +233,7 @@ async function main() {
       email: "owner@apexdental.in",
       passwordHash: defaultPasswordHash,
       fullName: "Dr. Vikramaditya Joshi",
-      phone: "+91 91408 92818",
+      phone: "+91 97655 39107",
       isActive: true,
     },
   });
@@ -255,7 +255,7 @@ async function main() {
       email: "dr.ananya@apexdental.in",
       passwordHash: defaultPasswordHash,
       fullName: "Dr. Ananya Kulkarni",
-      phone: "+91 84465 71232",
+      phone: "+91 97655 39107",
       isActive: true,
     },
   });

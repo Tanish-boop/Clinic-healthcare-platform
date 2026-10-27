@@ -104,7 +104,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
         </div>
 
         <div className="mt-3 pt-2 border-t border-slate-200 flex flex-wrap justify-between text-[10px] text-slate-500">
-          <span>Desk: {data.clinicPhone || "+91 91408 92818"} • Email: care@apexdental.in</span>
+          <span>Desk: {data.clinicPhone || "+91 97655 39107"} • Email: care@apexdental.in</span>
           <span>Consultation Timings: Mon-Sat 9:00 AM - 8:30 PM</span>
         </div>
       </div>

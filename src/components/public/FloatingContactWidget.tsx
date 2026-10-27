@@ -255,7 +255,7 @@ export function FloatingContactWidget() {
           {/* Security & Disclaimer Footer */}
           <div className="px-3 py-1 bg-slate-100 border-t border-slate-200/80 text-[9px] text-slate-500 flex justify-between items-center">
             <span>🛡️ Rate-Limited & End-to-End Sanitized</span>
-            <span>Emergency: +91 98230 45678</span>
+            <span>Emergency: +91 97655 39107</span>
           </div>
         </div>
       )}
@@ -266,7 +266,7 @@ export function FloatingContactWidget() {
       <div className="flex items-center gap-3">
         {/* Button A: WhatsApp Direct Shortcut */}
         <a
-          href="https://wa.me/919823045678?text=Hello%20Apex%20Dental%20%26%20Aesthetic%20Lounge%2C%20I%20would%20like%20to%20inquire%20about%20a%20consultation."
+          href="https://wa.me/919765539107?text=Hello%20Apex%20Dental%20%26%20Aesthetic%20Lounge%2C%20I%20would%20like%20to%20inquire%20about%20a%20consultation."
           target="_blank"
           rel="noopener noreferrer"
           className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xl hover:shadow-2xl transition transform hover:scale-105 active:scale-95"
@@ -283,7 +283,7 @@ export function FloatingContactWidget() {
 
           {/* Desktop Hover Tooltip */}
           <span className="hidden sm:block absolute right-full mr-3 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
-            Direct WhatsApp Desk (+91 98230 45678)
+            Direct WhatsApp Desk (+91 97655 39107)
           </span>
         </a>
 

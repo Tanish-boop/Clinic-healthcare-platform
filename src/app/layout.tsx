@@ -80,7 +80,7 @@ export default function RootLayout({
         "@id": "https://apexdental.in/#clinic",
         name: "Apex Dental & Aesthetic Lounge",
         url: "https://apexdental.in",
-        telephone: "+91 91408 92818",
+        telephone: "+91 97655 39107",
         priceRange: "₹₹",
         image: "https://apexdental.in/images/reception-lounge.jpg",
         medicalSpecialty: [

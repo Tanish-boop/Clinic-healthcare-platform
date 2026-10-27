@@ -92,9 +92,9 @@ export const clinicConfig: ClinicConfig = {
   slug: "apex-dental-pune",
 
   // 2. Contact Details
-  primaryPhone: "+91 91408 92818",
-  secondaryPhone: "+91 84465 71232",
-  whatsappNumber: "+91 98230 45678",
+  primaryPhone: "+91 97655 39107",
+  secondaryPhone: "+91 97655 39107",
+  whatsappNumber: "+91 97655 39107",
   email: "care@apexdental.in",
   websiteUrl: "https://apexdental.in",
 
@@ -137,7 +137,7 @@ export const clinicConfig: ClinicConfig = {
       fullName: "Dr. Ananya Kulkarni",
       shortName: "Dr. Ananya Kulkarni (MDS)",
       email: "dr.ananya@apexdental.in",
-      phone: "+91 84465 71232",
+      phone: "+91 97655 39107",
       qualification: "BDS, MDS (Prosthodontics & Oral Implantology)",
       specialty: "Senior Prosthodontist & Oral Implantologist",
       regNumber: "MDC Reg: A-28491 / MSDC",
@@ -153,7 +153,7 @@ export const clinicConfig: ClinicConfig = {
       fullName: "Dr. Rohan Deshmukh",
       shortName: "Dr. Rohan Deshmukh (MD Derm)",
       email: "dr.rohan@apexdental.in",
-      phone: "+91 82083 17142",
+      phone: "+91 97655 39107",
       qualification: "MBBS, MD (Dermatology, Venereology & Leprosy)",
       specialty: "Consultant Dermatologist & Aesthetic Physician",
       regNumber: "MMC Reg: 2012/05/1429",

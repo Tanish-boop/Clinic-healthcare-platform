@@ -50,7 +50,7 @@ All demo accounts share the password: **`Password@123`**
 | **Super Admin Platform** | Complete | Tenant list, MRR metrics, subscription tiers, platform health monitor. |
 | **Patient Portal** | Complete | Dual-mode portal (`/portal`): authenticated chart view & public quick lookup by Booking Ref (`APT-2610-1000`) or phone (`98220 12345`), 1-click downloads for passes, prescriptions, and receipts. |
 | **Authentication & Registration** | Complete | Dual Sign-in / Sign-up portal (`/login`): Fast-fill 1-click demo profiles + real self-registration for Patients, Doctors, Clinic Owners, and Desk Staff via `/api/auth/register`. |
-| **Floating WhatsApp & Chatbot**| Complete | Direct WhatsApp shortcut (`wa.me/919823045678`) + 24/7 Dr. Apex AI triage assistant (`/api/chat`) with sliding-window rate limiting, input sanitization, and prompt-injection defense. |
+| **Floating WhatsApp & Chatbot**| Complete | Direct WhatsApp shortcut (`wa.me/919765539107`) + 24/7 Dr. Apex AI triage assistant (`/api/chat`) with sliding-window rate limiting, input sanitization, and prompt-injection defense. |
 | **AWS Deployment Suite** | Complete | Multi-stage production `Dockerfile`, `docker-compose.prod.yml` with PostgreSQL, and comprehensive AWS deployment guide (`AWS_DEPLOYMENT.md`). |
 | **Automated Test Suite** | Complete | 9 unit/integration tests passing in Vitest (`tests/`). |
 | **Production Build** | Complete | Next.js 14 production build succeeds with 0 errors across all 32 routes. Listening on `http://localhost:3001`. |

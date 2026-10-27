@@ -151,7 +151,7 @@ export default async function AppOverviewPage({ searchParams }: AppOverviewPageP
         <ReceptionConsole
           initialAppointments={receptionAppointments}
           clinicName={clinic?.name || "Apex Dental & Aesthetic Lounge"}
-          clinicPhone={clinic?.primaryPhone || "+91 91408 92818"}
+          clinicPhone={clinic?.primaryPhone || "+91 97655 39107"}
           doctors={doctors.map((d) => ({
             id: d.id,
             name: d.user.fullName,

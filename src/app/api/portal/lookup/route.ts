@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "No matching patient or booking record found. Please verify your reference number or contact clinic reception at +91 98230 45678.",
+            "No matching patient or booking record found. Please verify your reference number or contact clinic reception at +91 97655 39107.",
         },
         { status: 404 }
       );

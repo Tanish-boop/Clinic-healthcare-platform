@@ -52,7 +52,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     fee: "₹1,000",
     feeNote: "(Incl. RVG Digital X-Rays)",
     actionText: "Book Dr. Ananya",
-    phone: "+91 91408 92818",
+    phone: "+91 97655 39107",
     whatsappText:
       "Hello Dr. Ananya / Apex Dental, I would like to book a dental consultation with you in Pune.",
   },
@@ -75,7 +75,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     fee: "₹1,000",
     feeNote: "(Zero Waiting Protocol)",
     actionText: "Book Operatory Slot",
-    phone: "+91 91408 92818",
+    phone: "+91 97655 39107",
     whatsappText:
       "Hello Apex Lounge, I would like to inquire about Carl Zeiss microscopic treatment availability.",
   },
@@ -121,7 +121,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     fee: "₹1,000",
     feeNote: "(Hospital-Grade Sterility)",
     actionText: "Book Consultation",
-    phone: "+91 91408 92818",
+    phone: "+91 97655 39107",
     whatsappText:
       "Hello Apex Lounge, I would like to book a safe, sterile consultation in Pune.",
   },
@@ -144,7 +144,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     fee: "₹1,000",
     feeNote: "(Guaranteed Direct Entry)",
     actionText: "Reserve Priority Pass",
-    phone: "+91 91408 92818",
+    phone: "+91 97655 39107",
     whatsappText:
       "Hello Apex Lounge, I want to reserve an executive clinic consultation.",
   },
@@ -322,7 +322,7 @@ export function MobileHeroShowcase({
 
         {/* WhatsApp */}
         <a
-          href={`https://wa.me/919823045678?text=${encodeURIComponent(slide.whatsappText)}`}
+          href={`https://wa.me/919765539107?text=${encodeURIComponent(slide.whatsappText)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white py-2.5 px-2 rounded-xl font-bold text-xs shadow-md transition"

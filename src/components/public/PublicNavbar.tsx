@@ -14,7 +14,7 @@ interface PublicNavbarProps {
 
 export function PublicNavbar({
   clinicName = "Apex Dental & Aesthetic Lounge",
-  phone = "+91 91408 92818",
+  phone = "+91 97655 39107",
   area = "Somwar Peth",
   city = "Pune",
   slug,

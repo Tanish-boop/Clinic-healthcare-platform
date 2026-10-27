@@ -80,7 +80,7 @@ export function InvoiceReceiptSlip({ data, onClose, isModal = false }: InvoiceRe
           </p>
           <p className="flex items-center sm:justify-end gap-1.5 font-medium">
             <Phone className="w-3.5 h-3.5 text-teal-700 shrink-0" />
-            <span>{data.clinicPhone || "+91 (020) 2668-9100 / +91 98230 45678"}</span>
+            <span>{data.clinicPhone || "+91 97655 39107"}</span>
           </p>
           <p className="text-slate-500 font-mono text-[10px]">
             GSTIN: {data.clinicGst || "27AAACA9876Q1Z5"} • Clinical Est. Reg: PN-2024/774

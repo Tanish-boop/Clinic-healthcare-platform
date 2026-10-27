@@ -26,7 +26,7 @@ const DEFAULT_DOCTOR: MobileDoctorSlideInfo = {
   fee: "₹1,000",
   rating: "⭐ 4.9 (1,240+)",
   status: "Available Today",
-  phone: "+91 91408 92818",
+  phone: "+91 97655 39107",
   actionText: "Book Dr. Ananya",
   nameSnippet: "Ananya",
 };
@@ -114,7 +114,7 @@ export function MobileStickyBottomBar({
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Quick WhatsApp */}
           <a
-            href={`https://wa.me/919823045678?text=${whatsappText}`}
+            href={`https://wa.me/919765539107?text=${whatsappText}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] flex items-center justify-center border border-[#25D366]/30 shadow-2xs active:scale-95 transition"

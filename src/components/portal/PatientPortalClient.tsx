@@ -280,8 +280,8 @@ export function PatientPortalClient({
                 ⭐ 4.9 ★ Rated by 1,240+ Verified Pune Patients
               </span>
               <span className="text-slate-700">•</span>
-              <a href="tel:+919823045678" className="text-white hover:text-teal-300 transition">
-                Emergency Desk: +91 98230 45678
+              <a href="tel:+919765539107" className="text-white hover:text-teal-300 transition">
+                Emergency Desk: +91 97655 39107
               </a>
             </div>
           ))}
@@ -379,7 +379,7 @@ export function PatientPortalClient({
             {/* Quick Action Badges */}
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href="https://wa.me/919823045678?text=Hello%20Apex%20Dental%2C%20I%20am%20a%20registered%20patient%20inquiring%20about%20my%20records."
+                href="https://wa.me/919765539107?text=Hello%20Apex%20Dental%2C%20I%20am%20a%20registered%20patient%20inquiring%20about%20my%20records."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md transition"
@@ -389,11 +389,11 @@ export function PatientPortalClient({
               </a>
 
               <a
-                href="tel:+919823045678"
+                href="tel:+919765539107"
                 className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl font-semibold text-xs transition backdrop-blur-md"
               >
                 <Phone className="w-4 h-4 text-teal-300" />
-                <span>+91 98230 45678</span>
+                <span>+91 97655 39107</span>
               </a>
             </div>
           </div>
@@ -1288,7 +1288,7 @@ export function PatientPortalClient({
                 serviceName: selectedSlipApt.serviceName || "Clinical Consultation",
                 consultationFee: selectedSlipApt.price || 1000,
                 clinicName: "Apex Dental & Aesthetic Lounge",
-                clinicPhone: "+91 91408 92818",
+                clinicPhone: "+91 97655 39107",
                 clinicAddress: "Shop 12-14, Royal Heritage Complex, Somwar Peth / Baner-Pashan Link Road, Pune 411011",
                 tokenNumber: 3,
               }}
@@ -1318,7 +1318,7 @@ export function PatientPortalClient({
               data={{
                 encounterDate: selectedSlipRx.prescriptionDate,
                 clinicName: "Apex Dental & Aesthetic Lounge",
-                clinicPhone: "+91 91408 92818",
+                clinicPhone: "+91 97655 39107",
                 clinicAddress: "Somwar Peth / Baner-Pashan Link Road, Pune 411011",
                 doctorName: selectedSlipRx.doctorName,
                 doctorQualification: selectedSlipRx.doctorQualification || "BDS, MDS",
@@ -1361,7 +1361,7 @@ export function PatientPortalClient({
                 invoiceNumber: selectedSlipInv.invoiceNumber,
                 invoiceDate: selectedSlipInv.invoiceDate,
                 clinicName: "Apex Dental & Aesthetic Lounge",
-                clinicPhone: "+91 91408 92818",
+                clinicPhone: "+91 97655 39107",
                 clinicAddress: "Shop 12-14, Royal Heritage Complex, Somwar Peth / Baner-Pashan Link Road, Pune 411011",
                 clinicGst: "27AABCA1234F1Z5",
                 patientName: patient?.fullName || "Patient",
