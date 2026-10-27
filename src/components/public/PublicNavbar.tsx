@@ -101,7 +101,7 @@ export function PublicNavbar({
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden xl:flex items-center gap-6 text-sm font-medium text-slate-700">
+        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-700">
           <Link href={basePath || "/"} className="hover:text-teal-600 transition">
             Home
           </Link>
@@ -114,117 +114,102 @@ export function PublicNavbar({
           <Link href={`${basePath}/contact`} className="hover:text-teal-600 transition">
             Timings & Directions
           </Link>
-          <Link
-            href="/portal"
-            className="text-teal-800 font-semibold hover:text-teal-950 transition flex items-center gap-1"
-          >
-            <span>Patient Portal</span>
+          <Link href={`${basePath}/policies`} className="hover:text-teal-600 transition">
+            Patient Policies
           </Link>
         </nav>
 
-        {/* CTA Buttons */}
+        {/* Desktop CTA Buttons */}
         <div className="hidden sm:flex items-center gap-3">
           <Link
-            href="/login"
-            className="text-xs font-bold text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-100 transition"
-          >
-            Sign In
-          </Link>
-          <Link
             href="/login?tab=register"
-            className="inline-flex items-center gap-1.5 border border-teal-700/80 bg-teal-50/60 hover:bg-teal-100 text-teal-900 px-3.5 py-2 rounded-lg text-xs font-bold transition shadow-2xs"
+            className="inline-flex items-center gap-1.5 border border-teal-700/80 bg-teal-50/70 hover:bg-teal-100 text-teal-900 px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-2xs"
           >
-            <User className="w-3.5 h-3.5 text-teal-700" />
+            <User className="w-4 h-4 text-teal-700" />
             <span>Sign Up</span>
           </Link>
           <Link
             href={`${basePath}/book`}
-            className="inline-flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm hover:shadow transition"
+            className="inline-flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm hover:shadow transition"
           >
-            <Calendar className="w-3.5 h-3.5" />
+            <Calendar className="w-4 h-4" />
             <span>Book Appointment</span>
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-slate-700 hover:text-slate-900 focus:outline-none"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {/* Mobile Quick Header Actions (< 640px) */}
+        <div className="flex sm:hidden items-center gap-2">
+          <Link
+            href="/login?tab=register"
+            className="inline-flex items-center gap-1 border border-teal-700/80 bg-teal-50/90 text-teal-900 px-2.5 py-1.5 rounded-lg text-xs font-bold shadow-2xs"
+          >
+            <User className="w-3.5 h-3.5 text-teal-700" />
+            <span>Sign Up</span>
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-slate-700 hover:text-slate-900 focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile drop-down */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3 animate-in fade-in duration-150">
           <Link
             href={basePath || "/"}
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-800 font-medium py-2 hover:text-teal-600"
+            className="block text-slate-800 font-medium py-2 hover:text-teal-600 border-b border-slate-100"
           >
             Home
           </Link>
           <Link
             href={`${basePath}/about`}
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-800 font-medium py-2 hover:text-teal-600"
+            className="block text-slate-800 font-medium py-2 hover:text-teal-600 border-b border-slate-100"
           >
             About the Doctors
           </Link>
           <Link
             href={`${basePath}/services`}
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-800 font-medium py-2 hover:text-teal-600"
+            className="block text-slate-800 font-medium py-2 hover:text-teal-600 border-b border-slate-100"
           >
             Services & Pricing
           </Link>
           <Link
             href={`${basePath}/contact`}
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-800 font-medium py-2 hover:text-teal-600"
+            className="block text-slate-800 font-medium py-2 hover:text-teal-600 border-b border-slate-100"
           >
             Clinic Timings & Location
           </Link>
           <Link
             href={`${basePath}/policies`}
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-800 font-medium py-2 hover:text-teal-600"
+            className="block text-slate-800 font-medium py-2 hover:text-teal-600 border-b border-slate-100"
           >
             Patient Policies & FAQ
           </Link>
-          <Link
-            href="/portal"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-teal-800 font-bold py-2 hover:text-teal-900"
-          >
-            Patient Portal (Slips & Rx)
-          </Link>
-          <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-center border border-slate-300 bg-white text-slate-700 py-2.5 rounded-lg font-bold text-xs hover:bg-slate-50 transition"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/login?tab=register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-center bg-teal-800 text-white py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1 hover:bg-teal-900 transition shadow-sm"
-              >
-                <User className="w-3.5 h-3.5" />
-                <span>Sign Up</span>
-              </Link>
-            </div>
+
+          <div className="pt-3 flex flex-col gap-2.5">
+            <Link
+              href="/login?tab=register"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-center bg-teal-800 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
+            >
+              <User className="w-4 h-4" />
+              <span>Create Account (Sign Up)</span>
+            </Link>
             <Link
               href={`${basePath}/book`}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-center bg-teal-700 hover:bg-teal-800 text-white py-2.5 rounded-lg font-semibold text-xs flex items-center justify-center gap-1.5"
+              className="text-center bg-teal-700 hover:bg-teal-800 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5"
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-4 h-4" />
               <span>Book Appointment</span>
             </Link>
             <a
@@ -232,9 +217,9 @@ export function PublicNavbar({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-center border border-teal-600 bg-teal-50 text-teal-800 py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5"
+              className="text-center border border-teal-600 bg-teal-50 text-teal-800 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5"
             >
-              <MapPin className="w-3.5 h-3.5 text-teal-700" />
+              <MapPin className="w-4 h-4 text-teal-700" />
               <span>Get Directions on Google Maps ↗</span>
             </a>
           </div>
