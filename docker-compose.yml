@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  clinic-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medinexus-clinic-app
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - SESSION_SECRET=medinexus-super-secure-production-secret-key-32chars
+      - NEXT_PUBLIC_APP_URL=http://localhost:3001
+    volumes:
+      - clinic-data:/app/prisma
+      - clinic-uploads:/app/uploads
+
+volumes:
+  clinic-data:
+  clinic-uploads:

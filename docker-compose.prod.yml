@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medinexus-clinic-app
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://medinexus_user:StrongSecurePassword2026@postgres:5432/medinexus_db?schema=public
+      - JWT_SECRET=super_secret_jwt_hmac_sha256_production_key_minimum_32_characters
+      - NEXT_PUBLIC_CLINIC_PHONE=+91 98230 45678
+      - NEXT_PUBLIC_CLINIC_WHATSAPP=+91 98230 45678
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: medinexus-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: medinexus_user
+      POSTGRES_PASSWORD: StrongSecurePassword2026
+      POSTGRES_DB: medinexus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medinexus_user -d medinexus_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
