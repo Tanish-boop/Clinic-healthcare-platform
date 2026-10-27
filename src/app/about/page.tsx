@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { ShieldCheck, Award, Stethoscope, GraduationCap, HeartHandshake } from "lucide-react";
@@ -7,18 +7,7 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-    include: {
-      doctors: {
-        include: {
-          user: { select: { fullName: true, avatarUrl: true } },
-        },
-      },
-    },
-  });
-
-  if (!clinic) return null;
+  const clinic = await getFlagshipClinic();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">

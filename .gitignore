@@ -11,13 +11,17 @@
 /out/
 .next/standalone
 
-# Local Database & SQLite files
-*.db
+# Local Database & SQLite temporary journals
 *.db-journal
-*.sqlite
-*.sqlite3
-prisma/dev.db
-prisma/dev.db-journal
+*.sqlite-journal
+!prisma/dev.db
+/dev.db
+
+# Private security & recovery files (NEVER commit)
+recovery-codes*.txt
+*recovery*.txt
+*.pem
+*.key
 
 # Environment variables & secrets (NEVER commit real credentials)
 .env

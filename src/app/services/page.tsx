@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { formatCurrency } from "@/lib/utils";
@@ -8,20 +8,10 @@ import { Clock, CheckCircle2, Calendar } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function ServicesPage() {
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-    include: {
-      services: {
-        where: { isActive: true },
-        orderBy: { displayOrder: "asc" },
-      },
-    },
-  });
-
-  if (!clinic) return null;
+  const clinic = await getFlagshipClinic();
 
   // Group services by category
-  const categories: Record<string, typeof clinic.services> = {};
+  const categories: Record<string, any[]> = {};
   for (const s of clinic.services) {
     if (!categories[s.category]) {
       categories[s.category] = [];

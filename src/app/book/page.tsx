@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { BookingWidget } from "@/components/public/BookingWidget";
@@ -13,23 +13,7 @@ interface BookPageProps {
 }
 
 export default async function BookPage({ searchParams }: BookPageProps) {
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-    include: {
-      doctors: {
-        where: { isActive: true },
-        include: {
-          user: { select: { fullName: true } },
-        },
-      },
-      services: {
-        where: { isActive: true, isPubliclyBookable: true },
-        orderBy: { displayOrder: "asc" },
-      },
-    },
-  });
-
-  if (!clinic) return null;
+  const clinic = await getFlagshipClinic();
 
   const doctorOptions = clinic.doctors.map((d) => ({
     id: d.id,

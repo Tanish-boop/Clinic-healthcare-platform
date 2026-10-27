@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { BookingWidget } from "@/components/public/BookingWidget";
@@ -28,39 +28,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch flagship clinic (slug: "apex-dental-pune" or first active clinic)
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-    include: {
-      doctors: {
-        where: { isActive: true },
-        include: {
-          user: {
-            select: { fullName: true, avatarUrl: true },
-          },
-        },
-      },
-      services: {
-        where: { isActive: true, isPubliclyBookable: true },
-        orderBy: { displayOrder: "asc" },
-      },
-      operatingHours: {
-        orderBy: { dayOfWeek: "asc" },
-      },
-      cmsSections: true,
-    },
-  });
-
-  if (!clinic) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-6 text-center">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-800">Clinic System Initializing</h1>
-          <p className="text-slate-500 mt-2">Please run database seed to populate clinic data.</p>
-        </div>
-      </div>
-    );
-  }
+  const clinic = await getFlagshipClinic();
 
   const doctorOptions = clinic.doctors.map((d) => ({
     id: d.id,

@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { MapPin, Phone, Mail, Clock, Car, AlertTriangle, ShieldCheck } from "lucide-react";
@@ -6,11 +6,7 @@ import { MapPin, Phone, Mail, Clock, Car, AlertTriangle, ShieldCheck } from "luc
 export const dynamic = "force-dynamic";
 
 export default async function ContactPage() {
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-  });
-
-  if (!clinic) return null;
+  const clinic = await getFlagshipClinic();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">

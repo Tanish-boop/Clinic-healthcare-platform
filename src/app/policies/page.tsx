@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { getFlagshipClinic } from "@/lib/clinicData";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { Shield, Clock, FileText, Lock } from "lucide-react";
@@ -6,11 +6,7 @@ import { Shield, Clock, FileText, Lock } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function PoliciesPage() {
-  const clinic = await db.clinic.findFirst({
-    where: { status: "ACTIVE" },
-  });
-
-  if (!clinic) return null;
+  const clinic = await getFlagshipClinic();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
@@ -44,7 +40,7 @@ export default async function PoliciesPage() {
               </div>
               <div className="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
                 <p>
-                  To respect the time of all patients and our medical specialists, we request a minimum of <strong>{clinic.cancellationNoticeHours} hours advance notice</strong> if you need to reschedule or cancel your confirmed appointment.
+                  To respect the time of all patients and our medical specialists, we request a minimum of <strong>{(clinic as any).cancellationNoticeHours || 4} hours advance notice</strong> if you need to reschedule or cancel your confirmed appointment.
                 </p>
                 <p>
                   Appointments may be rescheduled directly through your online patient portal or by calling the clinic front desk. Repeated unnotified no-shows (more than two consecutive appointments) may require a phone verification before subsequent bookings are accepted.
