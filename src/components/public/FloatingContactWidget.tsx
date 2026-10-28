@@ -16,6 +16,7 @@ import {
   Calendar,
   CheckCircle2,
 } from "lucide-react";
+import { cleanDoctorNameOnly } from "@/lib/utils";
 
 interface ChatMessage {
   id: string;
@@ -364,7 +365,7 @@ export function FloatingContactWidget() {
 
           {/* Desktop Hover Tooltip */}
           <span className="hidden sm:block absolute right-full mr-3 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
-            WhatsApp Dr. {activeDoctor?.name?.trim().replace(/^dr\.?\s+/i, "") || "Ananya"} (+91 97655 39107)
+            WhatsApp Dr. {cleanDoctorNameOnly(activeDoctor?.name) || "Ananya"} (+91 97655 39107)
           </span>
         </a>
 

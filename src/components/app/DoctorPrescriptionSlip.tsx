@@ -4,6 +4,7 @@ import { Shield, Printer, CheckCircle2, Clock, Calendar, MapPin, Phone, User, He
 import { useRef } from "react";
 import { format } from "date-fns";
 import { printIsolatedSlip } from "@/lib/printUtils";
+import { formatDoctorName } from "@/lib/utils";
 
 export interface PrescriptionItemData {
   medicineName: string;
@@ -67,7 +68,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
   const content = (
     <div
       ref={slipRef}
-      className="printable-slip-container bg-white text-slate-900 font-sans p-6 sm:p-10 max-w-3xl mx-auto rounded-2xl border border-slate-300 shadow-2xl print:shadow-none print:border-none print:p-0"
+      className="printable-slip-container bg-white text-slate-900 font-sans p-4 sm:p-8 lg:p-10 max-w-3xl mx-auto rounded-2xl border border-slate-300 shadow-2xl print:shadow-none print:border-none print:p-0"
     >
       {/* ------------------------------------------------------------- */}
       {/* 1. OFFICIAL CLINIC & DOCTOR LETTERHEAD                        */}
@@ -92,7 +93,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
           </div>
 
           <div className="text-left sm:text-right text-[11px] text-slate-700 space-y-0.5">
-            <div className="font-bold text-slate-900">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
+            <div className="font-bold text-slate-900">{formatDoctorName(data.doctorName)}</div>
             <div className="text-teal-800 font-semibold">{data.doctorSpecialty}</div>
             <div className="text-slate-500 font-mono text-[10px]">
               {data.doctorQualification || "BDS, MDS • Specialist Practitioner"}
@@ -197,38 +198,43 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
         </div>
 
         {data.prescriptionItems.length > 0 ? (
-          <div className="border border-slate-300 rounded-xl overflow-hidden avoid-break">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
-                <tr>
-                  <th className="py-2.5 px-3 w-8">#</th>
-                  <th className="py-2.5 px-3">Medicine & Strength</th>
-                  <th className="py-2.5 px-3">Frequency</th>
-                  <th className="py-2.5 px-3">Timing</th>
-                  <th className="py-2.5 px-3">Duration</th>
-                  <th className="py-2.5 px-3">Special Instructions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {data.prescriptionItems.map((med, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/50">
-                    <td className="py-2.5 px-3 font-mono font-bold text-slate-500">{idx + 1}</td>
-                    <td className="py-2.5 px-3">
-                      <div className="font-bold text-slate-900">{med.medicineName}</div>
-                      {med.dosage && (
-                        <div className="text-[10px] text-teal-800 font-semibold">{med.dosage}</div>
-                      )}
-                    </td>
-                    <td className="py-2.5 px-3 font-semibold text-slate-800">{med.frequency}</td>
-                    <td className="py-2.5 px-3 text-slate-700">{med.timing}</td>
-                    <td className="py-2.5 px-3 font-semibold text-slate-900">{med.durationDays} Days</td>
-                    <td className="py-2.5 px-3 text-slate-600 text-[11px]">
-                      {med.instructions || "As directed"}
-                    </td>
+          <div>
+            <div className="overflow-x-auto w-full border border-slate-300 rounded-xl avoid-break shadow-2xs">
+              <table className="min-w-[560px] w-full text-left text-xs">
+                <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
+                  <tr>
+                    <th className="py-2.5 px-3 w-8">#</th>
+                    <th className="py-2.5 px-3">Medicine & Strength</th>
+                    <th className="py-2.5 px-3">Frequency</th>
+                    <th className="py-2.5 px-3">Timing</th>
+                    <th className="py-2.5 px-3">Duration</th>
+                    <th className="py-2.5 px-3">Special Instructions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-200 bg-white">
+                  {data.prescriptionItems.map((med, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-mono font-bold text-slate-500">{idx + 1}</td>
+                      <td className="py-2.5 px-3">
+                        <div className="font-bold text-slate-900">{med.medicineName}</div>
+                        {med.dosage && (
+                          <div className="text-[10px] text-teal-800 font-semibold">{med.dosage}</div>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 font-semibold text-slate-800 whitespace-nowrap">{med.frequency}</td>
+                      <td className="py-2.5 px-3 text-slate-700 whitespace-nowrap">{med.timing}</td>
+                      <td className="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">{med.durationDays} Days</td>
+                      <td className="py-2.5 px-3 text-slate-600 text-[11px] min-w-[120px]">
+                        {med.instructions || "As directed"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="sm:hidden flex items-center justify-end gap-1 text-[10px] text-slate-400 mt-1.5 font-medium">
+              <span>← Swipe table horizontally to see all columns →</span>
+            </div>
           </div>
         ) : (
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500 italic">
@@ -283,7 +289,7 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
             <div className="text-[10px] text-teal-900 font-bold uppercase tracking-wider">
               Verified Medical Seal
             </div>
-            <div className="text-xs font-bold text-slate-900">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
+            <div className="text-xs font-bold text-slate-900">{formatDoctorName(data.doctorName)}</div>
             <div className="text-[9px] text-teal-800">{data.doctorQualification || "BDS, MDS"}</div>
             <div className="text-[9px] text-slate-600 font-bold">REG: {data.doctorRegNumber || "MDC-74921"}</div>
           </div>
@@ -321,8 +327,27 @@ export function DoctorPrescriptionSlip({ data, onClose, isModal = false }: Docto
 
   if (isModal) {
     return (
-      <div className="printable-modal-overlay fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto print:p-0 print:bg-white">
-        <div className="printable-modal-inner relative w-full max-w-3xl my-8 print:my-0">
+      <div className="printable-modal-overlay fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto print:p-0 print:bg-white">
+        <div className="printable-modal-inner relative w-full max-w-3xl my-3 sm:my-8 print:my-0">
+          {onClose && (
+            <div className="no-print mb-2 flex items-center justify-between bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-slate-800 shadow-md">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                  Official Digital Prescription
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+                aria-label="Close Prescription Preview"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Close</span>
+              </button>
+            </div>
+          )}
           {content}
         </div>
       </div>

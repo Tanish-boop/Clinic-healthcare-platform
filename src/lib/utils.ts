@@ -65,3 +65,24 @@ export function formatIndianPhone(phone: string): string {
   }
   return phone;
 }
+
+/**
+ * Strips duplicate or nested "Dr." / "Dr" / "Doctor" prefixes and canonicalizes to "Dr. <Name>"
+ * e.g. "Dr. Dr. Ananya Kulkarni" -> "Dr. Ananya Kulkarni"
+ *      "Dr. Ananya Kulkarni"     -> "Dr. Ananya Kulkarni"
+ *      "Ananya Kulkarni"         -> "Dr. Ananya Kulkarni"
+ */
+export function formatDoctorName(name?: string | null): string {
+  if (!name) return "Dr. Specialist";
+  const cleaned = name.trim().replace(/^((dr|doctor)\.?\s*)+/i, "").trim();
+  return cleaned ? `Dr. ${cleaned}` : "Dr. Specialist";
+}
+
+/**
+ * Strips any "Dr." / "Doctor" prefix and returns the bare name only
+ * e.g. "Dr. Dr. Ananya Kulkarni" -> "Ananya Kulkarni"
+ */
+export function cleanDoctorNameOnly(name?: string | null): string {
+  if (!name) return "";
+  return name.trim().replace(/^((dr|doctor)\.?\s*)+/i, "").trim();
+}

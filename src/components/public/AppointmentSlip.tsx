@@ -3,7 +3,7 @@
 import { Shield, Printer, CheckCircle2, Clock, Calendar, MapPin, Phone, User, X } from "lucide-react";
 import { useRef } from "react";
 import { format } from "date-fns";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDoctorName } from "@/lib/utils";
 import { printIsolatedSlip } from "@/lib/printUtils";
 
 export interface AppointmentSlipData {
@@ -137,7 +137,7 @@ export function AppointmentSlip({ data, onClose, isModal = false }: AppointmentS
             Consulting Specialist
           </div>
           <div>
-            <div className="font-bold text-slate-900 text-sm">Dr. {data.doctorName.replace(/^dr\.?\s+/i, "")}</div>
+            <div className="font-bold text-slate-900 text-sm">{formatDoctorName(data.doctorName)}</div>
             <div className="text-teal-800 font-medium text-[11px]">
               {data.doctorSpecialty || "Consultant Specialist"}
             </div>

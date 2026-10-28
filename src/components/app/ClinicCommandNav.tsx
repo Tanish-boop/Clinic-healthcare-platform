@@ -26,6 +26,7 @@ import {
   Clock,
   CheckCircle2,
 } from "lucide-react";
+import { formatDoctorName } from "@/lib/utils";
 
 interface ClinicCommandNavProps {
   userName: string;
@@ -207,7 +208,7 @@ export function ClinicCommandNav({
             <div className="hidden lg:block text-left">
               <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px]">
                 {userRole === "DOCTOR"
-                  ? `Dr. ${userName.trim().replace(/^dr\.?\s+/i, "")}`
+                  ? formatDoctorName(userName)
                   : userName}
               </div>
               <div className="text-[10px] font-medium text-slate-500">

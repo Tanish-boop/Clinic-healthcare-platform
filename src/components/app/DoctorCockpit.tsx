@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { DoctorPrescriptionSlip } from "@/components/app/DoctorPrescriptionSlip";
 import Link from "next/link";
+import { formatDoctorName } from "@/lib/utils";
 
 interface QueueAppointment {
   id: string;
@@ -266,7 +267,7 @@ export function DoctorCockpit({
           </div>
           <div>
             <h2 className="text-base font-bold text-slate-900">
-              Doctor Clinical Cockpit • Dr. {doctorName.trim().replace(/^dr\.?\s+/i, "")}
+              Doctor Clinical Cockpit • {formatDoctorName(doctorName)}
             </h2>
             <p className="text-xs text-slate-500">
               {doctorSpecialty} • Active EHR Consultation
@@ -407,24 +408,24 @@ export function DoctorCockpit({
 
             {/* Specialty Clinical Template Switcher */}
             <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-subtle space-y-4">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-teal-600" />
-                  <h3 className="font-bold text-slate-900 text-sm">
+                  <Sparkles className="w-4 h-4 text-teal-600 shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-sm whitespace-nowrap">
                     Specialty Examination Template
                   </h3>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   {(["DENTAL", "DERMATOLOGY", "PHYSIOTHERAPY", "GENERAL_PRACTICE"] as const).map(
                     (mode) => (
                       <button
                         key={mode}
                         type="button"
                         onClick={() => setSpecialtyType(mode)}
-                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition ${
+                        className={`px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition whitespace-nowrap ${
                           specialtyType === mode
-                            ? "bg-teal-700 text-white"
-                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                            ? "bg-teal-700 text-white shadow-xs"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
                         }`}
                       >
                         {mode.replace("_", " ")}
@@ -897,7 +898,7 @@ export function DoctorCockpit({
 
           <div className="space-y-2">
             <h3 className="text-lg font-bold text-slate-900">
-              Welcome, Dr. {doctorName.trim().replace(/^dr\.?\s+/i, "")}
+              Welcome, {formatDoctorName(doctorName)}
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
               Your real-time Clinical EHR Cockpit is connected and ready. You have no patient appointments waiting in your queue today.

@@ -135,11 +135,11 @@ export default async function HomePage() {
                   </a>
 
                   <Link
-                    href="/login?tab=register"
+                    href="/login"
                     className="inline-flex items-center gap-2 text-sm font-bold text-teal-900 bg-teal-50 hover:bg-teal-100/90 px-4 py-3.5 rounded-xl border border-teal-300 transition shadow-2xs"
                   >
                     <User className="w-4 h-4 text-teal-700" />
-                    <span>Create Account (Sign Up)</span>
+                    <span>Sign Up / Access Demos</span>
                   </Link>
 
                   <a

@@ -32,7 +32,7 @@ import {
   MessageCircle,
   Award,
 } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDoctorName } from "@/lib/utils";
 import { AppointmentSlip } from "@/components/public/AppointmentSlip";
 import { DoctorPrescriptionSlip } from "@/components/app/DoctorPrescriptionSlip";
 import { InvoiceReceiptSlip, InvoiceReceiptSlipData } from "@/components/public/InvoiceReceiptSlip";
@@ -599,7 +599,7 @@ export function PatientPortalClient({
                     </h3>
 
                     <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                      Consultant: <strong className="text-slate-900">{nextAppointment.doctorName}</strong> ({nextAppointment.doctorSpecialty || "MDS Specialist"})
+                      Consultant: <strong className="text-slate-900">{formatDoctorName(nextAppointment.doctorName)}</strong> ({nextAppointment.doctorSpecialty || "MDS Specialist"})
                     </p>
 
                     <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold text-slate-700">
@@ -804,7 +804,7 @@ export function PatientPortalClient({
                     <div className="text-xs text-slate-600 space-y-1">
                       <div className="flex items-center gap-2">
                         <Stethoscope className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Doctor: <strong>{apt.doctorName}</strong></span>
+                        <span>Doctor: <strong>{formatDoctorName(apt.doctorName)}</strong></span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-slate-400" />
@@ -871,7 +871,7 @@ export function PatientPortalClient({
                           </strong>
                         </div>
                         <h4 className="font-extrabold text-slate-900 text-sm mt-0.5">
-                          Prescribed by: {rx.doctorName} ({rx.doctorSpecialty || "MDS Specialist"})
+                          Prescribed by: {formatDoctorName(rx.doctorName)} ({rx.doctorSpecialty || "MDS Specialist"})
                         </h4>
                         <p className="text-[11px] text-teal-800 font-mono">
                           Registration: {rx.doctorRegNumber || "MDC / MMC Verified"}

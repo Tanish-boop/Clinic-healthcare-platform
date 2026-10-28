@@ -137,11 +137,11 @@ export function PublicNavbar({
         {/* Right: Desktop CTA Buttons (Evenly Spaced & No-Wrap) */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <Link
-            href="/login?tab=register"
+            href="/login"
             className="whitespace-nowrap inline-flex items-center gap-1.5 border border-teal-700/80 bg-teal-50/70 hover:bg-teal-100 text-teal-900 px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-2xs"
           >
             <User className="w-4 h-4 text-teal-700" />
-            <span>Sign Up</span>
+            <span>Sign Up / Demos</span>
           </Link>
           <Link
             href={`${basePath}/book`}
@@ -155,8 +155,8 @@ export function PublicNavbar({
         {/* Mobile Quick Header Actions (< 640px) */}
         <div className="flex sm:hidden items-center gap-2">
           <Link
-            href="/login?tab=register"
-            className="inline-flex items-center gap-1 border border-teal-700/80 bg-teal-50/90 text-teal-900 px-2.5 py-1.5 rounded-lg text-xs font-bold shadow-2xs"
+            href="/login"
+            className="inline-flex items-center gap-1 border border-teal-700/80 bg-teal-50/90 text-teal-900 px-2.5 py-1.5 rounded-lg text-xs font-bold shadow-2xs whitespace-nowrap"
           >
             <User className="w-3.5 h-3.5 text-teal-700" />
             <span>Sign Up</span>
@@ -212,12 +212,12 @@ export function PublicNavbar({
 
           <div className="pt-3 flex flex-col gap-2.5">
             <Link
-              href="/login?tab=register"
+              href="/login"
               onClick={() => setMobileMenuOpen(false)}
               className="text-center bg-teal-800 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
             >
               <User className="w-4 h-4" />
-              <span>Create Account (Sign Up)</span>
+              <span>Sign In / Demos</span>
             </Link>
             <Link
               href={`${basePath}/book`}

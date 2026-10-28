@@ -26,14 +26,9 @@ export default function LoginPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"SIGN_IN" | "REGISTER">("SIGN_IN");
 
-  // Check URL query parameters (e.g. /login?tab=register)
+  // Always default to Sign In & Demos so clicking "Sign Up" lands on Existing & Demos
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("tab") === "register") {
-        setActiveTab("REGISTER");
-      }
-    }
+    setActiveTab("SIGN_IN");
   }, []);
 
   // Sign In State
@@ -518,32 +513,44 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              {/* Fast-Fill Demo Credentials */}
-              <div className="pt-4 border-t border-slate-100">
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                    <span>Fast-Fill Demo Profiles</span>
-                  </span>
-                  <span className="text-[10px] font-mono text-teal-800 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-full font-semibold">
-                    1-Click Test
+              {/* Fast-Fill Demo Credentials (Dark High-Contrast Card) */}
+              <div className="mt-6 bg-slate-950 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-xl">
+                <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center border border-teal-500/30 shrink-0">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">
+                        Fast-Fill Demo Profiles
+                      </h4>
+                      <p className="text-[10px] text-slate-400">
+                        Tap any role to auto-load credentials & test instantly
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold shrink-0">
+                    1-Click Ready
                   </span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
                   {demoAccounts.map((acc) => (
                     <button
                       key={acc.email}
                       type="button"
                       onClick={() => fillDemo(acc.email)}
-                      className="text-left p-2.5 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 transition text-xs flex justify-between items-center group"
+                      className="text-left p-2.5 rounded-xl bg-slate-900 hover:bg-teal-950/80 border border-slate-800 hover:border-teal-500/80 transition text-xs flex justify-between items-center group cursor-pointer"
                     >
                       <div className="min-w-0 pr-2">
-                        <span className="font-bold text-slate-900 block text-[11px] truncate group-hover:text-teal-900">
+                        <span className="font-bold text-slate-100 block text-xs truncate group-hover:text-teal-300">
                           {acc.role}
                         </span>
-                        <span className="text-[10px] text-slate-500 block truncate">{acc.email}</span>
+                        <span className="text-[10px] text-teal-300/90 font-mono block truncate mt-0.5">
+                          {acc.email}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-mono text-teal-700 bg-slate-100 group-hover:bg-teal-700 group-hover:text-white px-2 py-1 rounded-lg font-bold shrink-0 transition">
+                      <span className="text-[10px] font-mono font-bold text-white bg-teal-700 hover:bg-teal-600 group-hover:bg-teal-500 group-hover:text-slate-950 px-2.5 py-1 rounded-lg shrink-0 transition shadow-xs">
                         Fill
                       </span>
                     </button>
