@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Phone, MessageCircle, MapPin, ExternalLink } from "lucide-react";
+import { Calendar, Phone, MapPin, ExternalLink } from "lucide-react";
 
 export interface MobileDoctorSlideInfo {
   id: string;
@@ -76,11 +76,6 @@ export function MobileStickyBottomBar({
     }
   };
 
-  const cleanDoc = currentDoctor.shortName.trim().replace(/^dr\.?\s+/i, "");
-  const whatsappText = encodeURIComponent(
-    `Hello Dr. ${cleanDoc} & Apex Dental, I want consultation for Dr. ${cleanDoc} at your Pune clinic. Please share the available appointment slots.`
-  );
-
   return (
     <div
       data-testid="mobile-sticky-dock"
@@ -112,19 +107,7 @@ export function MobileStickyBottomBar({
         </div>
 
         {/* Action Buttons Synchronized with Active Doctor */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Quick WhatsApp */}
-          <a
-            href={`https://wa.me/919765539107?text=${whatsappText}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] flex items-center justify-center border border-[#25D366]/30 shadow-2xs active:scale-95 transition"
-            aria-label={`WhatsApp ${currentDoctor.shortName}`}
-            title="Chat on WhatsApp"
-          >
-            <MessageCircle className="w-4 h-4 fill-[#25D366] text-[#25D366]" />
-          </a>
-
+        <div className="flex items-center gap-2 shrink-0">
           {/* Call Desk */}
           <a
             href={`tel:${activePhone}`}
