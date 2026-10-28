@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   MessageSquare,
   X,
@@ -28,6 +29,19 @@ interface ChatMessage {
 }
 
 export function FloatingContactWidget() {
+  const pathname = usePathname();
+
+  // Show WhatsApp & Chatbot ONLY on home page and patient-facing pages.
+  // Strictly hide on logged-in clinic staff dashboards (/app/* for Doctor, Receptionist, Accountant, Owner)
+  // and login page so it never obstructs clinical workflows, queue tables, or demo login cards.
+  if (
+    pathname?.startsWith("/app") ||
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/demo-video")
+  ) {
+    return null;
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
