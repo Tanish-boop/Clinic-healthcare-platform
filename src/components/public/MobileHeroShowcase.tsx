@@ -12,6 +12,9 @@ import {
   Sparkles,
   Clock,
   ExternalLink,
+  Stethoscope,
+  Activity,
+  Building2,
 } from "lucide-react";
 import { MobileDoctorSlideInfo } from "./MobileStickyBottomBar";
 
@@ -35,7 +38,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
 })[] = [
   {
     id: "doctor-ananya",
-    label: "👩‍⚕️ Dr. Ananya (MDS)",
+    label: "Dr. Ananya (MDS)",
     name: "Dr. Ananya Kulkarni, BDS, MDS",
     title: "Dr. Ananya Kulkarni, BDS, MDS",
     shortName: "Dr. Ananya Kulkarni (MDS)",
@@ -48,7 +51,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     specialty: "Painless Root Canals & Cosmetic Dentistry",
     statusBadge: "Consulting In-Clinic Today",
     status: "Available In-Clinic Today",
-    rating: "⭐ 4.9 (1,240+)",
+    rating: "4.9 (1,240+)",
     fee: "₹1,000",
     feeNote: "(Incl. RVG Digital X-Rays)",
     actionText: "Book Dr. Ananya",
@@ -58,7 +61,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
   },
   {
     id: "operatory",
-    label: "🏥 Zeiss Operatory",
+    label: "Zeiss Operatory",
     name: "Carl Zeiss Microscopic Operatory",
     title: "Carl Zeiss Microscopic Operatory",
     shortName: "Zeiss Operatory & Suite",
@@ -71,7 +74,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     specialty: "Precision Microscope & Zero Pain Protocols",
     statusBadge: "Next Slot: 04:30 PM Today",
     status: "Active & Sanitized Today",
-    rating: "⭐ 4.9 (Micro-Endo)",
+    rating: "4.9 (Micro-Endo)",
     fee: "₹1,000",
     feeNote: "(Zero Waiting Protocol)",
     actionText: "Book Operatory Slot",
@@ -81,7 +84,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
   },
   {
     id: "doctor-rohan",
-    label: "👨‍⚕️ Dr. Rohan (MD)",
+    label: "Dr. Rohan (MD)",
     name: "Dr. Rohan Deshmukh, MBBS, MD",
     title: "Dr. Rohan Deshmukh, MBBS, MD",
     shortName: "Dr. Rohan Deshmukh (MD Derm)",
@@ -94,17 +97,17 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     specialty: "Clinical Dermatology & Medical HydraFacials",
     statusBadge: "Consulting Today (Slots Available)",
     status: "Available Today (Slots Open)",
-    rating: "⭐ 4.9 (980+)",
+    rating: "4.9 (980+)",
     fee: "₹1,200",
     feeNote: "(Incl. Dermoscopy Exam)",
     actionText: "Book Dr. Rohan",
-    phone: "+91 82083 17142",
+    phone: "+91 97655 39107",
     whatsappText:
       "Hello Dr. Rohan / Apex Lounge, I would like to book a clinical dermatology & skin consultation in Pune.",
   },
   {
     id: "sterilization",
-    label: "🔬 Sterile Suite",
+    label: "Sterile Suite",
     name: "European Class-B Sterilization",
     title: "European Class-B Sterilization",
     shortName: "Melag Sterile Suite",
@@ -117,7 +120,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     specialty: "Zero Cross-Infection Guarantee",
     statusBadge: "Hospital-Grade Sterilization Active",
     status: "134°C Vacuum Protocol Active",
-    rating: "⭐ 5.0 (Bio-Log)",
+    rating: "5.0 (Bio-Log)",
     fee: "₹1,000",
     feeNote: "(Hospital-Grade Sterility)",
     actionText: "Book Consultation",
@@ -127,7 +130,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
   },
   {
     id: "lounge",
-    label: "✨ Patient Lounge",
+    label: "Executive Lounge",
     name: "Executive Waiting & Consult Lounge",
     title: "Executive Waiting & Consult Lounge",
     shortName: "Apex Executive Lounge",
@@ -140,7 +143,7 @@ export const CLINIC_SLIDES: (MobileDoctorSlideInfo & {
     specialty: "Warm Hospitality & Instant Check-ins",
     statusBadge: "Zero Waiting Room Delay",
     status: "Open 09:00 AM - 08:30 PM",
-    rating: "⭐ 4.9 (1,240+)",
+    rating: "4.9 (1,240+)",
     fee: "₹1,000",
     feeNote: "(Guaranteed Direct Entry)",
     actionText: "Reserve Priority Pass",
@@ -218,6 +221,21 @@ export function MobileHeroShowcase({
                 : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/90 shadow-2xs"
             }`}
           >
+            {item.avatar && (item.id === "doctor-ananya" || item.id === "doctor-rohan") ? (
+              <img
+                src={item.avatar}
+                alt={item.shortName}
+                className="w-4 h-4 rounded-full object-cover shrink-0 border border-white/80 shadow-2xs"
+              />
+            ) : item.id === "operatory" ? (
+              <Activity className={`w-3.5 h-3.5 shrink-0 ${activeSlide === idx ? "text-teal-200" : "text-teal-600"}`} />
+            ) : item.id === "sterilization" ? (
+              <ShieldCheck className={`w-3.5 h-3.5 shrink-0 ${activeSlide === idx ? "text-teal-200" : "text-emerald-600"}`} />
+            ) : item.id === "lounge" ? (
+              <Building2 className={`w-3.5 h-3.5 shrink-0 ${activeSlide === idx ? "text-teal-200" : "text-amber-600"}`} />
+            ) : (
+              <Stethoscope className={`w-3.5 h-3.5 shrink-0 ${activeSlide === idx ? "text-teal-200" : "text-teal-600"}`} />
+            )}
             <span>{item.label}</span>
           </button>
         ))}
@@ -249,10 +267,10 @@ export function MobileHeroShowcase({
               <Star className="w-3 h-3 fill-amber-400" />
             </div>
             <span className="text-[11px] font-extrabold text-slate-900">
-              {slide.rating.split(" ")[1] || "4.9"}
+              {slide.rating.split(" ")[0] || "4.9"}
             </span>
             <span className="text-[10px] text-slate-500 font-medium">
-              {slide.rating.split(" ")[2] || "(1,240+)"}
+              {slide.rating.split(" ")[1] || "(1,240+)"}
             </span>
           </div>
 

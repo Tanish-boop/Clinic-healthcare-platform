@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Phone, MapPin, ExternalLink } from "lucide-react";
+import { Calendar, Phone, MapPin, ExternalLink, Star } from "lucide-react";
 
 export interface MobileDoctorSlideInfo {
   id: string;
@@ -24,7 +24,7 @@ const DEFAULT_DOCTOR: MobileDoctorSlideInfo = {
   specialty: "Chief Dental Surgeon & Implantologist",
   avatar: "/images/doctor-ananya.jpg",
   fee: "₹1,000",
-  rating: "⭐ 4.9 (1,240+)",
+  rating: "4.9 (1,240+)",
   status: "Available Today",
   phone: "+91 97655 39107",
   actionText: "Book Dr. Ananya",
@@ -97,7 +97,8 @@ export function MobileStickyBottomBar({
               {currentDoctor.shortName}
             </div>
             <div className="text-[11px] text-teal-700 font-semibold flex items-center gap-1 truncate">
-              <span>{currentDoctor.rating}</span>
+              <Star className="w-3 h-3 fill-amber-400 text-amber-500 shrink-0" />
+              <span>{currentDoctor.rating.replace(/^⭐\s*/, "")}</span>
               <span className="text-slate-400">•</span>
               <span className="text-slate-500 font-normal truncate">
                 {currentDoctor.status}
